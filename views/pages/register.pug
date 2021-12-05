@@ -1,0 +1,14 @@
+html(lang="en")
+	head
+		link(rel="stylesheet" href="/css/login.css")
+		script(src='./js/register.js' defer)
+		title Login
+	body 
+		include ../partials/header 
+		h2 Create an Account 
+		div(class='form')
+			input(id="username-input" class="form-input" type="text" name="name" placeholder="Enter username")
+			input(id="password-input" class="form-input" type="text" name="pass" placeholder="Enter password")
+			br
+			br
+			div(id="submit" class="form-button") Register

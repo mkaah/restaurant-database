@@ -1,0 +1,19 @@
+html(lang="en")
+	head
+		meta(charset="UTF-8")
+		meta(http-equiv="X-UA-Compatible" content="IE=edge")
+		meta(name="viewport" content="width=device-width, initial-scale=1.0")
+		//link(rel="stylesheet" href="/css/header.css")
+
+div#header
+	a(href="/" class="headlink") Home
+	|
+	a(href="/users" class="headlink") Users
+	if (session.loggedin)
+		a(href="/orderform" class="headlink") Order Food
+		a(href="/profile" class="headlink") Profile 
+		a(href="/logout" class="headlink") Logout 
+	else 
+		a(href="/register" class="headlink") Register 
+		a(href="/login" class="headlink") Login 
+	
