@@ -1,8 +1,23 @@
 html(lang="en")
 	head
-        title User
-		
-	body 
+		script(src='../js/user.js' defer)
+		title User
+	body
 		include ../partials/header 
 		
-		h2 Profile of #{user.name}
+		h2 Profile of #{user.username}
+		if session.username === user.username
+			div 
+				input(id='public' type='radio' value='Public' name='status' checked=user.privacy==false)
+				| Public
+				br
+				input(id='private' type='radio' value='Private' name='status' checked=user.privacy==true)
+				| Private
+				br 
+				button(id='submit' type='button' onclick=`updateUser("${user._id}")`) Update
+		div
+			h3 Order History
+			if user.orders
+				each order in user.orders
+					a(href=`/orders/${order._id}`) #{order._id}
+					br

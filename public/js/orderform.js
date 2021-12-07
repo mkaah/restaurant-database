@@ -30,8 +30,6 @@ function submitOrder(){
 }
 
 
-
-
 let aragorn = {
 	id: 0,
 	name: "Aragorn's Orc BBQ",

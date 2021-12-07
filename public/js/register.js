@@ -1,4 +1,5 @@
 const submit = document.getElementById("submit");
+const message = document.getElementById("message");
 const PORT = location.port;
 
 submit.addEventListener("click", register);
@@ -29,11 +30,17 @@ function register() {
             let id = JSON.parse(this.responseText);
             console.log(id);
 
-            location.href = `http://localhost:${PORT}/user/${id}`;
+            location.href = `http://localhost:${PORT}/users/${id}`;
+        } else if(req.status === 401) {
+            let text = document.createElement("p");
+            text.textContent = "Unable to register new user";
+            message.appendChild(text);
+        } else if(req.status === 500){
+            let text = document.createElement("p");
+            text.textContent = "Server Error. Unable to register new user";
+            message.appendChild(text);
         }
-        if(req.status === 401) {
-            alert("Unable to register");
-        }
+        
     };
 
     req.open("POST", "/register", true);

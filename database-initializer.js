@@ -1,13 +1,16 @@
+const User = require("./models/userModel");
+
 let userNames = ["winnifred", "lorene", "cyril", "vella", "erich", "pedro", "madaline", "leoma", "merrill",  "jacquie"];
 let users = [];
 
 userNames.forEach(name =>{
-	let u = {};
-	u.username = name;
-	u.password = name;
-	u.privacy = false;
-	users.push(u);
-});
+	users.push(new User({
+		username: name, 
+		password: name, 
+		privacy: false, 
+		orders: []
+	})
+)});
 
 let mongo = require('mongodb');
 let MongoClient = mongo.MongoClient;

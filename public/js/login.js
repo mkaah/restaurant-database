@@ -1,9 +1,10 @@
 const submit = document.getElementById("submit");
+const message = document.getElementById("message");
 const PORT = location.port;
 
 submit.addEventListener("click", login);
 
-function login() {
+async function login() {
 
     let username = document.getElementById("username-input").value;
     let password = document.getElementById("password-input").value;
@@ -25,14 +26,15 @@ function login() {
     let req = new XMLHttpRequest();
 
     req.onreadystatechange = function () {
-        console.log(req)
         if (req.status === 200) {
+            console.log('User was added to the db');
             let id = JSON.parse(this.responseText);
-
-            location.href = `http://localhost:${PORT}/user/${id}`;
+            location.href = `http://localhost:${PORT}/users/${id}`;
         }
         if(req.status === 401) {
-            alert("Unable to log in");
+            let text = document.createElement("p");
+            text.textContent = "Incorrect username or password";
+            message.appendChild(text);
         }
     };
 

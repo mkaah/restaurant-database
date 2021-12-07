@@ -1,0 +1,13 @@
+body {
+    width: auto;
+}
+
+.headlink {
+    margin: 10px;
+    color: white;
+}
+
+.header {
+    background-color: rgb(85, 83, 84);
+    display: flex;
+}

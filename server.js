@@ -11,9 +11,6 @@ const User = require("./models/userModel");
 const orderRouter = require('./routers/order-router');
 const usersRouter = require('./routers/users-router');
 
-// Global variables
-// app.locals.restaurants = {};
-
 // Setting session store
 const store = new MongoDBStore({
     mongoUrl: 'mongodb://localhost:27017/a4',
@@ -29,7 +26,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(session({
     name: 'a4-session',
-    secret: 'some very secret key',
+    secret: 'secret key',
     store: store,
     resave: true,
     saveUninitialized: false
@@ -48,12 +45,30 @@ app.use((req, res, next) => {
 /************** Server Routes **************/
 app.use(exposeSession);
 app.get(['/', '/home'], (req,res) => res.render('./pages/home'));
-app.get('/login', (req,res) => res.render('./pages/login'));
 app.get('/register', (req,res) => res.render('./pages/register'));
+app.get('/login', (req,res) => {
+    if (req.session.loggedin) {
+        res.status(403).send("Already logged in");
+        return;
+    }
+
+    res.status(200);
+    res.render('./pages/login');
+});
+app.get('/logout', logout);
+app.get('/orderform', (req,res) => {
+    if(!req.session.loggedin){ // must be logged in to access the orderform
+        res.status(403).send("Must be logged in");
+    }
+
+    res.status(200);
+    res.render('./pages/orderform');
+});
+
 app.post('/register', register);
 app.post('/login', login);
-app.get('/logout', logout);
 
+// External Routers
 app.use('/users', usersRouter);
 app.use('/orders', auth, orderRouter);
 
@@ -71,10 +86,9 @@ function register(req, res, next){
         if(err) return res.status(401).send("Error finding user");
 
         if(result.length === 0){ // user does not exist - add them to the db
-            let newUser = new User({username: req.body.username, password: req.body.password, privacy: false});
+            let newUser = new User({username: req.body.username, password: req.body.password, privacy: false, order: {}});
             newUser.save(function(err, result) {
-                if(err) return console.log(err.message);
-                //res.status(200).send(JSON.stringify(newUser));
+                if(err) return res.status(500).send('Could not create new user');
             });
             
             // log user in 
@@ -94,7 +108,7 @@ function register(req, res, next){
 function login(req, res, next){
     if(req.session){
         if(req.session.loggedin){
-            res.status(200).send(JSON.stringify(req.session.userid));
+            res.status(200).send(JSON.stringify(req.session.userid)); // user already logged in. error?????
             return;
         }
         
