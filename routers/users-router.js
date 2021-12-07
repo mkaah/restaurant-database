@@ -2,28 +2,25 @@ const express = require('express');
 const router = express.Router();
 const User = require("../models/userModel");
 
-// - POST '/users'
 
-
-// router.post('/', createUser);
 router.get('/', getUsers, sendUsers);
 router.param('userid', findUser);
 router.get('/:userid', sendUser);
-router.post('/:userid', updateUser);
+router.post('/:userid', updateUserPrivacy);
 
 
 // get all public users
 function getUsers(req,res, next){
     if(req.query.name){
         User.find({username: { $regex: new RegExp(req.query.name, "i")}}, {privacy: false})
-            .exec(function(err, users){
+        .exec(function(err, users){
             if(err) return res.status(500).send("Error in the server");
             req.users = users;
             next();
         })
     } else {
         User.find({privacy: false})
-            .exec(function(err, users){
+        .exec(function(err, users){
             if(err) return res.status(500).send("Error in the server");
             req.users = users;
             next();
@@ -80,11 +77,13 @@ function sendUser(req, res){
     });
 }
 
-function updateUser(req, res){
+function updateUserPrivacy(req, res){
     User.findOneAndUpdate({_id: req.body.userID}, {privacy: req.body.privacyStatus}, function(err, user){
         if(err) return res.status(500).send('Could not update user');
         res.status(201).json(req.user);
-    })
+    });
 }
+
+
 
 module.exports = router;
