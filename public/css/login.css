@@ -1,3 +1,5 @@
+/* CSS taken from Joseph Malovic's T7 Demo and was modified*/
+
 .form {
     position: relative;
     background: #fff;
@@ -19,6 +21,7 @@
 }
 
 .form-button {
+    font-family: Calibri;
     text-transform: uppercase;
     outline: 0;
     border: 0;

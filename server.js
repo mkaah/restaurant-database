@@ -56,7 +56,7 @@ app.get('/login', (req,res) => {
     res.render('./pages/login');
 });
 app.get('/logout', logout);
-app.get('/orderform', (req,res) => {
+app.get('/orderform', auth, (req,res) => {
     if(!req.session.loggedin){ // must be logged in to access the orderform
         res.status(403).send("Must be logged in");
     }
@@ -70,7 +70,7 @@ app.post('/login', login);
 
 // External Routers
 app.use('/users', usersRouter);
-app.use('/orders', auth, orderRouter);
+app.use('/orders', orderRouter);
 
 // Expose session to pug
 function exposeSession(req,res,next){
@@ -80,6 +80,9 @@ function exposeSession(req,res,next){
     next();
 }
 
+/**
+ * Adds user to the db and logs them in if they have a unique username
+ */
 function register(req, res, next){
     // Check if user already exists
     User.find({username: req.body.username}, function(err, result){
@@ -98,29 +101,33 @@ function register(req, res, next){
             res.locals.session = req.session;
             res.status(200).send(JSON.stringify(req.session.userid));
             return;
+
         } else{ // user already exists
-            res.status(401).send("User already exists"); // sends 3 times??
+            res.status(401).send("User already exists");
             return;
         }
     })
 }
 
+/**
+ * Logs user in if they are an existing user in the db and the  
+ * correct credentials were entered
+ */
 function login(req, res, next){
     if(req.session){
-        if(req.session.loggedin){
-            res.status(200).send(JSON.stringify(req.session.userid)); // user already logged in. error?????
+        if(req.session.loggedin){ // user already logged in
+            res.status(200).send("Already logged in"); 
             return;
         }
         
+        // find user with the username/password entered
         User.findOne({username: req.body.username, password: req.body.password}, function(err, result){
             if(err) return res.status(401).send("Error finding user");
             
             if(!result){ // user not found
                 res.status(401).send("Could not find user");
                 return;
-            } else{
-                console.log(result);
-    
+            } else{ // user was found. Log them in
                 req.session.loggedin = true;
                 req.session.username = result.username;
                 req.session.userid = result._id;
@@ -134,12 +141,19 @@ function login(req, res, next){
     }
 }
 
+/**
+ * Logs user out and destroys the session
+ */
 function logout(req, res){
     req.session.destroy();
     delete res.locals.session;
     res.redirect('/home');
 }
 
+/**
+ * Checks if user is currently logged in.
+ * Called when user tries to access /orderform 
+ */
 function auth(req, res, next){
     if(!req.session.loggedin){
         res.status(401).send("Must login first");

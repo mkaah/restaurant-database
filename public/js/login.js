@@ -4,7 +4,12 @@ const PORT = location.port;
 
 submit.addEventListener("click", login);
 
-async function login() {
+/**
+ * Get user input from username/password fields and send them to the server. 
+ * If the user is successfully logged in, send them to their profile page.
+ * Display an error message otherwise.
+ */
+function login() {
 
     let username = document.getElementById("username-input").value;
     let password = document.getElementById("password-input").value;
@@ -15,6 +20,7 @@ async function login() {
         document.getElementById("username-input").value = "";
         return;
     }
+
     if(password.length === 0){
         alert('Please enter a password');
         document.getElementById("password-input").value = "";
@@ -24,14 +30,13 @@ async function login() {
     const userLogin = { username, password }
 
     let req = new XMLHttpRequest();
-
     req.onreadystatechange = function () {
-        if (req.status === 200) {
-            console.log('User was added to the db');
+        if (this.readyState === 4 && req.status === 200) {
             let id = JSON.parse(this.responseText);
+            
+            // redirect to profile page
             location.href = `http://localhost:${PORT}/users/${id}`;
-        }
-        if(req.status === 401) {
+        } else if(this.readyState === 4 && req.status === 401) {
             let text = document.createElement("p");
             text.textContent = "Incorrect username or password";
             message.appendChild(text);

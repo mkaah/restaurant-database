@@ -1,24 +1,7 @@
-// const submit = document.getElementById('submit');
-// submit.addEventListener('click', updateUser);
-
-// let currUser;
-// let userID;
-
-// function init(userid){
-//     console.log(userid);
-//     let xhttp = new XMLHttpRequest();
-// 	xhttp.onreadystatechange = function () {
-// 		if (this.readyState == 4 && this.status == 200) {
-// 			currUser = JSON.parse(this.responseText);   // might not need entire user
-//             userID = currUser._id;
-// 		}
-// 	}
-
-// 	xhttp.open("GET", `/users/${userid}`, true);
-// 	xhttp.setRequestHeader("Content-Type", "application/json")
-// 	xhttp.send();
-// }
-
+/**
+ * Get user privacy status from radio buttons and send it to the 
+ * server to update their changes
+ */
 function updateUser(userID){
     console.log("Update user");
     let privacyStatus;
@@ -34,7 +17,7 @@ function updateUser(userID){
     let req = new XMLHttpRequest();
 
     req.onreadystatechange = function () {
-        if (req.status === 201) {
+        if (this.readyState === 4 && req.status === 201) {
             alert("Changes have been saved");
         }
         if(req.status === 401) {

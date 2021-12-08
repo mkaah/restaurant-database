@@ -2,14 +2,17 @@ const express = require('express');
 const router = express.Router();
 const User = require("../models/userModel");
 
-
 router.get('/', getUsers, sendUsers);
 router.param('userid', findUser);
 router.get('/:userid', sendUser);
 router.post('/:userid', updateUserPrivacy);
 
-
-// get all public users
+/**
+ * Gets all matching users and stores them in req.users.
+ * Matching users include:
+ *  - Public users
+ *  - If name query is given: case insensitive match of public users with that name
+ */
 function getUsers(req,res, next){
     if(req.query.name){
         User.find({username: { $regex: new RegExp(req.query.name, "i")}}, {privacy: false})
@@ -28,7 +31,11 @@ function getUsers(req,res, next){
     }
 }
 
-
+/**
+ * If HTML is requested: Renders the page with list of matching users
+ * If JSON is requested: Returns a JSON representation of matching users
+ * with that given ID
+ */
 function sendUsers(req, res){
     res.format({
         'text/html': ()=> {
@@ -43,8 +50,11 @@ function sendUsers(req, res){
     });
 }
 
+/**
+ * Finds the user in the db with the given id and stores that user
+ * in req.user
+ */
 function findUser(req, res, next, id){
-    // Search db for user with given id
     User.findById(id)
     .exec(function(err, user){
         if(err) return res.status(500).send("Error in the server");
@@ -59,6 +69,13 @@ function findUser(req, res, next, id){
     })
 }
 
+/**
+ * If HTML is requested: 
+ *      - Renders the page of the user with the given id
+ *      - If the user is private and you are not logged in as the user, an error is displayed
+ * If JSON is requested: Returns a JSON representation of the user
+ * with that given ID
+ */
 function sendUser(req, res){
     res.format({
         'application/json': ()=> {
@@ -77,13 +94,14 @@ function sendUser(req, res){
     });
 }
 
+/**
+ * Update the privacy status of the user with the given id
+ */
 function updateUserPrivacy(req, res){
     User.findOneAndUpdate({_id: req.body.userID}, {privacy: req.body.privacyStatus}, function(err, user){
         if(err) return res.status(500).send('Could not update user');
         res.status(201).json(req.user);
     });
 }
-
-
 
 module.exports = router;
