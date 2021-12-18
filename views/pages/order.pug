@@ -1,0 +1,17 @@
+html(lang="en")
+	head
+		script(src='../js/user.js' defer)
+		title Order
+	body
+		include ../partials/header 
+		h3 Order #{order._id} 
+		p Ordered by: #{order.user.username}
+		p Restaurant: #{order.restaurantName}
+		p Order: 
+		each item in order.order 
+			li #{item.name} x #{item.quantity}
+			br 
+		p Subtotal: $#{order.subtotal} 
+		p Tax: $#{order.tax} 
+		p Delivery Fee: $#{order.fee} 
+		p Total: $#{order.total} 

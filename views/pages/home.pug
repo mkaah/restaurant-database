@@ -1,10 +1,26 @@
 html(lang="en")
 	head
-		meta(charset="UTF-8")
-		meta(http-equiv="X-UA-Compatible" content="IE=edge")
-		meta(name="viewport" content="width=device-width, initial-scale=1.0")
+		link(rel="stylesheet" href="/css/home.css")
 		
 	body 
 		include ../partials/header 
-		
-		h2 Welcome to the Home Page!
+		#root
+			.grids
+				.circles-bottom
+					.dark-yellow-circle
+					.dark-green-circle
+				.circles-top
+					.light-green-circle
+						.light-yellow-circle
+				.side 
+				.center 
+					.box
+						.message
+							h1 Welcome to the 
+							h1 Restaurant Database 
+							br
+							br
+							h3 Login and start ordering food!
+				.side 
+				
+		include ../partials/footer

@@ -1,0 +1,120 @@
+h1{
+    font-size: 52;
+    color: black;
+}
+
+h3{
+    font-size: 36;
+    font-style: italic;
+    color: #908478;
+}
+
+#root{
+    flex: 1 1 auto;
+}
+
+.grids{
+    height: 100%;
+    position: relative;
+}
+
+@media only screen and (min-width: 768px){
+    .grids {
+        grid-template-columns: repeat(12, 1fr);
+        display: grid;
+    }
+}
+
+.side{
+    display: grid;
+}
+
+@media only screen and (min-width: 768px){
+    .side {
+        grid-column: auto / span 3;
+    }
+}
+
+.center{
+    display: grid;
+    height: 100%;
+}
+
+@media only screen and (min-width: 768px){
+    .center {
+        grid-column: auto / span 6;
+    }
+}
+
+.box{
+    background-color: rgb(255, 255, 255);
+    box-shadow: rgb(0 0 0 / 20%) 5px 5px 15px, rgb(255 255 255 / 20%) -5px -5px 15px;
+    border-radius: 15px;
+    height: 550px;
+    width: 100%;
+    display: inline-grid;
+    -webkit-box-align: center;
+    align-items: center;
+    align-self: center;
+    text-align: center;
+    z-index: 1;
+}
+
+.circles-bottom{
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    height: 28rem;
+    width: 38rem;
+    overflow: clip;
+}
+
+.dark-green-circle{
+    position: absolute;
+    width: 38rem;
+    height: 32rem;
+    bottom: -12rem;
+    left: -5rem;
+    border-radius: 50%;
+    background: #7E9278;
+    overflow: hidden;
+}
+
+.dark-yellow-circle{
+    position: absolute;
+    width: 33rem;
+    height: 28rem;
+    top: 0rem;
+    left: -5rem;
+    border-radius: 50%;
+    background: #ECEBC9;
+}
+
+.circles-top{
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    height: 28rem;
+    width: 38rem;
+    overflow: clip;
+}
+
+.light-green-circle{
+    position: absolute;
+    width: 35rem;
+    height: 25rem;
+    top: -5rem;
+    right: -5rem;
+    border-radius: 50%;
+    background: #AABDA0;
+}
+
+.light-yellow-circle{
+    position: absolute;
+    width: 28rem;
+    height: 20rem;
+    top: 0rem;
+    right: 0rem;
+    border-radius: 50%;
+    background: #F6F6DB;
+}
