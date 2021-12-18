@@ -1,6 +1,7 @@
-COMP 2406 Assignment 4
+#Restaurant Database Project
+A web application built with MongoDB that allows users to order food from available restaurants, view and edit their profiles, and view public users and their orders. 
 
-Mika Le - 101141818
+![](public\images\homepage.png)
 
 Running the server:
 - open a terminal and run mongo daemon
